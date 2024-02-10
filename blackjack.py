@@ -144,4 +144,81 @@ def displayHands(playerHand, dealerHand, showDealerHand):
     if showDealerHand:
         print('DEALER:', getHandValue(dealerHand))
         displayCards(dealerHand)
+    
+    else:
+        print('DEALER: ?????')
+        # Hide the dealers first card:
+        displayCards([BACKSIDE] + dealerHand[1:])
         
+    # Show the plyers cards:
+    print('PLAYER:', getHandValue(playerHand))
+    displayCards(playerHand)
+
+
+def getHandValue(cards):
+    """Returns the value of the cards. Face cards are worth 10, aces are worth 11 or 1 (this function picks the most suitable ace value)."""
+    value = 0
+    numberOfAces = 0
+    
+    # Add the value for the non-ace cards:
+    for card in cards:
+        rank = card[0]  # card is a tuple like (rank, suit)
+        if rank == 'A':
+            numberOfAces += 1
+        elif rank in ('K', 'Q', 'J'): #Face cards are worth 10 points.
+            value +=10
+        else:
+            value += int(rank) # numbered cards are worth their number.
+            
+    #add the value for the aces:
+    value += numberOfAces   # Add 1 per ace
+    for i in range(numberOfAces):
+        #if anotherr 10 can be added with busting, do so:
+        if value + 10 <= 21:
+            value += 10
+            
+    return value
+
+
+
+def displayCards(cards):
+    """Display all the cards in the cards list"""
+    rows = ['', '', '', '', '']  # the texrt to display on each row.
+    
+    for i , card in enumerate(cards):
+        rows[0] += ' ___  ' # Print the top line of the card.
+        if card == BACKSIDE:
+            # Print a cards back:
+            rows[1] += '|## | '
+            rows[2] += '|###| '
+            rows[3] += '|_##| '
+        else:
+            # Print the cards front:
+            rank, suit = card 
+            rows[1] += '|{} | '.format(rank.ljust(2))
+            rows[2] += '| {} | '.format(suit)
+            rows[3] += '|_{}| '.format(rank.rjust(2, '_'))
+        
+    # print the rows on the screen
+    for row in rows:
+        print(row)
+        
+        
+def getMove(playerHand, money):
+    """Asks the player for their move, and returns 'H' for hit, 'S' for stand, and 'D' for doble down."""
+    while True:     #keep looping until the player enters a correct move
+        moves = ['(H)it', '(S)tand']
+        
+        # the player can double down on their first move, which we can tell because they will have exacttly two cards:
+        if len(playerHand) == 2 and money > 0:
+            moves.append('(D)ouble down')
+            
+            # get the players move:
+        movePrompt = ',  '.join(moves) + '> '
+        move = input(movePrompt).upper()
+        if move in ('H', 'S'):
+            return move # Player has entered a value move
+        if move == 'D' and '(D)ouble down' in moves:
+            return move #Player has entered a value move.
+if __name__ == '__main__':
+    main()            
