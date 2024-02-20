@@ -5,7 +5,7 @@ COLORS = ['Red', 'Yellow', 'Green', 'Blue']
 VALUES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+2', 'Reverse', 'Skip']
 WILD_CARDS = ['+4WILD', 'LS']
 
-# Create a deck of Uno cards
+
 deck = [(color, value) for color in COLORS for value in VALUES]
 deck += [(color, value) for color in COLORS for value in VALUES[1:]]  # Skip '0' for non-neutral colors
 deck += [(color, 'Reverse') for color in COLORS]
@@ -100,17 +100,6 @@ def display_card(card):
 def display_hand(hand):
     for card in hand:
         display_card(card)
-
-
-# Modify your existing code to use these functions when displaying cards:
-# Inside the main() function:
-
-# Example:
-print(f"{player_name}'s Hand:")
-display_hand(players[player_name])
-print("Top Card:")
-display_card(top_card)
-
-
+        
 if __name__ == "__main__":
     main()
